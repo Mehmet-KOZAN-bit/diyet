@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
 import { Loader2 } from "lucide-react";
@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const { user, role, loading } = useAuth();
   const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -31,10 +32,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
-      <Sidebar role="client" />
-      <div className="flex flex-1 flex-col overflow-hidden text-slate-900 dark:text-slate-50">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto bg-slate-50 p-6 dark:bg-slate-950">
+      <Sidebar 
+        role="client" 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)} 
+      />
+      <div className="flex flex-1 flex-col overflow-hidden text-slate-900 dark:text-slate-50 relative">
+        <Navbar onMenuClick={() => setIsMobileMenuOpen(true)} />
+        <main className="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-6 dark:bg-slate-950">
           {children}
         </main>
       </div>

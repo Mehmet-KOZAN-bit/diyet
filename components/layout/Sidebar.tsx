@@ -3,11 +3,19 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, User, ArrowLeft, Settings, LogOut, Leaf, BookTemplate, Activity, Camera, Utensils, ShoppingCart, MessageCircle, CalendarDays, Flame } from "lucide-react";
+import { LayoutDashboard, Users, User, ArrowLeft, Settings, LogOut, Leaf, BookTemplate, Activity, Camera, Utensils, ShoppingCart, MessageCircle, CalendarDays, Flame, X } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
 
-export function Sidebar({ role }: { role: "dietitian" | "client" | null }) {
+export function Sidebar({ 
+  role,
+  isOpen,
+  onClose
+}: { 
+  role: "dietitian" | "client" | null;
+  isOpen?: boolean;
+  onClose?: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -36,13 +44,32 @@ export function Sidebar({ role }: { role: "dietitian" | "client" | null }) {
   const links = role === "dietitian" ? dietitianLinks : clientLinks;
 
   return (
-    <div className="flex h-full w-64 flex-col border-r bg-white dark:bg-slate-900 dark:border-slate-800">
-      <div className="flex h-16 items-center border-b px-6 dark:border-slate-800">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Leaf className="h-5 w-5 text-blue-600" />
-          <span className="text-slate-900 dark:text-slate-50">Diyetisyen Pro</span>
-        </Link>
-      </div>
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm md:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar Content */}
+      <div className={cn(
+        "fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col border-r bg-white dark:bg-slate-900 dark:border-slate-800 transition-transform duration-300 ease-in-out md:static md:translate-x-0",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="flex h-16 items-center justify-between border-b px-6 dark:border-slate-800">
+          <Link href="/" className="flex items-center gap-2 font-semibold" onClick={onClose}>
+            <Leaf className="h-5 w-5 text-blue-600" />
+            <span className="text-slate-900 dark:text-slate-50">Diyetisyen Pro</span>
+          </Link>
+          <button 
+            onClick={onClose} 
+            className="md:hidden text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-50 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
       <div className="flex-1 overflow-auto py-4">
         <nav className="grid items-start px-4 text-sm font-medium gap-1">
           {links.map((link) => {
@@ -53,6 +80,7 @@ export function Sidebar({ role }: { role: "dietitian" | "client" | null }) {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={onClose}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-blue-600 dark:hover:text-blue-400",
                   isActive
@@ -76,6 +104,7 @@ export function Sidebar({ role }: { role: "dietitian" | "client" | null }) {
           Çıkış Yap
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
