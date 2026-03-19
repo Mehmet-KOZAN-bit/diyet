@@ -133,18 +133,20 @@ export default function WaterTracker({ clientId }: { clientId: string }) {
             </p>
           </div>
 
-          {percentage >= 100 ? (
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100/80 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded-full font-bold text-sm">
-              <span className="text-lg">🎉</span> Günlük hedefe başarıyla ulaştın!
-            </div>
-          ) : (
+          <div className="flex flex-col gap-3 items-center md:items-start">
+            {currentMl >= targetMl && (
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100/80 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded-full font-bold text-sm">
+                <span className="text-lg">🎉</span> Günlük hedefe başarıyla ulaştın!
+              </div>
+            )}
+            
             <Button 
               onClick={addGlass} 
-              className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 shadow-md hover:shadow-lg transition-transform active:scale-95 flex items-center gap-2 font-medium"
+              className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto text-white rounded-full px-6 shadow-md hover:shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 font-medium"
             >
               <Plus className="w-5 h-5" /> 1 Bardak Su Ekle (+250ml)
             </Button>
-          )}
+          </div>
         </div>
       </CardContent>
     </Card>
