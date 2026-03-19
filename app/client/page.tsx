@@ -7,6 +7,7 @@ import { Activity, Footprints, Droplet, Star } from "lucide-react";
 import AIMentor from "@/components/shared/AIMentor";
 
 import InstagramShareButton from "@/components/shared/InstagramShareButton";
+import WaterTracker from "@/components/shared/WaterTracker";
 
 export default function ClientDashboardOverview() {
   const { clientProfile, dietPlan, weightLogs, loading, user } = useClientData();
@@ -70,18 +71,12 @@ export default function ClientDashboardOverview() {
         </div>
       )}
 
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
          <div className="bg-blue-50 dark:bg-blue-900/40 p-5 rounded-xl border border-blue-100 dark:border-blue-800 flex flex-col justify-center shadow-sm">
             <div className="flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-300 mb-1">
               <Activity className="w-4 h-4" /> Kilo Gelişimi
             </div>
             <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{currentWeight} kg</p>
-         </div>
-         <div className="bg-cyan-50 dark:bg-cyan-900/40 p-5 rounded-xl border border-cyan-100 dark:border-cyan-800 flex flex-col justify-center shadow-sm">
-            <div className="flex items-center gap-2 text-sm font-medium text-cyan-600 dark:text-cyan-300 mb-1">
-              <Droplet className="w-4 h-4" /> Son Su
-            </div>
-            <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{currentWater} Lt</p>
          </div>
          <div className="bg-orange-50 dark:bg-orange-900/40 p-5 rounded-xl border border-orange-100 dark:border-orange-800 flex flex-col justify-center shadow-sm">
             <div className="flex items-center gap-2 text-sm font-medium text-orange-600 dark:text-orange-300 mb-1">
@@ -90,6 +85,8 @@ export default function ClientDashboardOverview() {
             <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{currentSteps.toLocaleString()}</p>
          </div>
       </div>
+
+      <WaterTracker clientId={clientProfile.id} />
 
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
         <Card className="shadow-sm border-0 ring-1 ring-slate-200 dark:ring-slate-800">

@@ -16,7 +16,6 @@ export default function ClientLogsPage() {
   const { clientProfile, dietPlan, loading } = useClientData();
   
   const [newWeight, setNewWeight] = useState("");
-  const [newWater, setNewWater] = useState("");
   const [newSteps, setNewSteps] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [savingLog, setSavingLog] = useState(false);
@@ -44,7 +43,6 @@ export default function ClientLogsPage() {
 
       await addDoc(collection(db, `clients/${clientProfile.id}/weight_logs`), {
         weight: Number(newWeight),
-        water: Number(newWater) || 0,
         steps: Number(newSteps) || 0,
         date: new Date().toISOString().split('T')[0],
         photos: photoUrl ? [photoUrl] : [],
@@ -52,7 +50,6 @@ export default function ClientLogsPage() {
       });
 
       setNewWeight("");
-      setNewWater("");
       setNewSteps("");
       setFile(null);
       alert("Bugünün kaydı başarıyla alındı!");
@@ -81,21 +78,18 @@ export default function ClientLogsPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogWeight} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Bugünkü Kilonuz (kg)</Label>
                 <Input type="number" step="0.1" required value={newWeight} onChange={e => setNewWeight(e.target.value)} placeholder="Ör: 75.5" className="text-lg bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800" />
               </div>
               <div className="space-y-2">
-                <Label>İçilen Su (Litre)</Label>
-                <Input type="number" step="0.5" value={newWater} onChange={e => setNewWater(e.target.value)} placeholder="Ör: 2.5" className="text-lg bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800" />
+                <Label>Adım Sayısı (İsteğe Bağlı)</Label>
+                <Input type="number" value={newSteps} onChange={e => setNewSteps(e.target.value)} placeholder="Ör: 8500" className="text-lg bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800" />
               </div>
             </div>
             
-            <div className="space-y-2">
-              <Label>Adım Sayısı (İsteğe Bağlı)</Label>
-              <Input type="number" value={newSteps} onChange={e => setNewSteps(e.target.value)} placeholder="Ör: 8500" className="text-lg bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800" />
-            </div>
+            {/* Steps moved to the grid above */}
 
             <div className="space-y-2">
               <Label>Gelişim Fotoğrafı (İsteğe Bağlı)</Label>

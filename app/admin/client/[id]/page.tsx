@@ -22,6 +22,7 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
   
   const [client, setClient] = useState<any>(null);
   const [weightLogs, setWeightLogs] = useState<any[]>([]);
+  const [todayWater, setTodayWater] = useState(0);
   const [dietPlan, setDietPlan] = useState({ breakfast: "", lunch: "", dinner: "", snacks: "" });
   const [dietPlanId, setDietPlanId] = useState<string | null>(null);
   
@@ -60,6 +61,15 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
       setPhotos(allPhotos);
     });
 
+    const todayStr = new Date().toISOString().split('T')[0];
+    const unsubWater = onSnapshot(doc(db, `clients/${clientId}/water_logs`, todayStr), (docSnap) => {
+      if (docSnap.exists()) {
+        setTodayWater(docSnap.data().ml || 0);
+      } else {
+        setTodayWater(0);
+      }
+    });
+
     const unsubPlan = onSnapshot(query(collection(db, "diet_plans")), (snap) => {
        const plan = snap.docs.find(d => d.data().clientId === clientId);
        if (plan) {
@@ -74,6 +84,7 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
 
     return () => {
       unsubLogs();
+      unsubWater();
       unsubPlan();
       unsubTemplates();
     };
@@ -143,7 +154,6 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
   if (!client) return <div className="p-8">Danışan bilgileri yükleniyor...</div>;
 
   const currentWeight = weightLogs.length > 0 ? weightLogs[weightLogs.length - 1].weight : client.startingWeight;
-  const currentWater = weightLogs.length > 0 ? weightLogs[weightLogs.length - 1].water || 0 : 0;
   const currentSteps = weightLogs.length > 0 ? weightLogs[weightLogs.length - 1].steps || 0 : 0;
   const bmi = (currentWeight / ((client.height / 100) * (client.height / 100))).toFixed(1);
 
@@ -196,8 +206,10 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
                 <p className="text-xs font-semibold mt-1 text-slate-500">{currentWeight <= client.startingWeight ? "verildi" : "alındı"}</p>
              </div>
              <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-100 dark:border-slate-800 flex flex-col justify-center">
-                <div className="flex items-center gap-2 text-sm text-slate-500 mb-1"><Droplet className="w-4 h-4 text-cyan-500" /> Son Su</div>
-                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{currentWater} Lt</p>
+                <div className="flex items-center gap-2 text-sm text-slate-500 mb-1"><Droplet className="w-4 h-4 text-cyan-500" /> Bugünkü Su</div>
+                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                  {todayWater >= 1000 ? (todayWater / 1000).toFixed(1) + " L" : todayWater + " ml"}
+                </p>
              </div>
              <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-100 dark:border-slate-800 flex flex-col justify-center">
                 <div className="flex items-center gap-2 text-sm text-slate-500 mb-1"><Footprints className="w-4 h-4 text-orange-500" /> Son Adım</div>
