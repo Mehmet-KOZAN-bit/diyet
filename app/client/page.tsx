@@ -6,6 +6,8 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { Activity, Footprints, Droplet, Star } from "lucide-react";
 import AIMentor from "@/components/shared/AIMentor";
 
+import InstagramShareButton from "@/components/shared/InstagramShareButton";
+
 export default function ClientDashboardOverview() {
   const { clientProfile, dietPlan, weightLogs, loading, user } = useClientData();
 
@@ -44,9 +46,19 @@ export default function ClientDashboardOverview() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-300">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Genel Bakış</h1>
-        <p className="text-slate-500 mt-1">Tekrar merhaba, {clientProfile.name}. İşte mevcut vücut grafiğiniz.</p>
+      <div className="flex justify-between items-start gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Genel Bakış</h1>
+          <p className="text-slate-500 mt-1">Tekrar merhaba, {clientProfile.name}. İşte mevcut vücut grafiğiniz.</p>
+        </div>
+        
+        {weightLogs.length >= 1 && (
+          <InstagramShareButton 
+            clientName={clientProfile.name}
+            startingWeight={clientProfile.startingWeight}
+            currentWeight={currentWeight}
+          />
+        )}
       </div>
 
       {weightLogs.length >= 1 && (
