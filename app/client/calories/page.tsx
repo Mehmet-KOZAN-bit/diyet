@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Camera, Flame, Beef, Wheat, Droplets, Upload, Keyboard, CheckCircle, History, Activity } from "lucide-react";
+import { Camera, Flame, Beef, Wheat, Droplets, Upload, Keyboard, CheckCircle, History, Activity, Target } from "lucide-react";
 import AIMentor from "@/components/shared/AIMentor";
 
 export default function CaloriesPage() {
@@ -166,14 +166,30 @@ export default function CaloriesPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {type === "exercise" ? (
-              <div className="space-y-2">
-                <Label>Yaptığınız Aktiviteyi Yazın</Label>
-                <textarea
-                  value={exerciseText}
-                  onChange={(e) => { setExerciseText(e.target.value); setResult(null); setSaved(false); }}
-                  placeholder="Yarım saat yürüdüm, ardından 15 dakika koşu bandında koştum."
-                  className="w-full h-40 px-4 py-3 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-blue-50/50 dark:bg-slate-900 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400/40 transition-all"
-                />
+              <div className="space-y-4">
+                {dietPlan?.exercisePlan && (
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 rounded-xl border border-blue-100 dark:border-blue-900/50 flex flex-col sm:flex-row gap-3 items-start animate-in fade-in slide-in-from-top-4">
+                    <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg shrink-0">
+                      <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-blue-900 dark:text-blue-200 mb-1">Diyetisyenin Egzersiz Planı</p>
+                      <p className="text-sm text-blue-800 dark:text-blue-300 italic">
+                        "{dietPlan.exercisePlan}"
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="space-y-2">
+                  <Label>Yaptığınız Aktiviteyi Yazın</Label>
+                  <textarea
+                    value={exerciseText}
+                    onChange={(e) => { setExerciseText(e.target.value); setResult(null); setSaved(false); }}
+                    placeholder="Yarım saat yürüdüm, ardından 15 dakika koşu bandında koştum."
+                    className="w-full h-32 px-4 py-3 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400/40 transition-all font-medium"
+                  />
+                </div>
               </div>
             ) : mode === "photo" ? (
               <>

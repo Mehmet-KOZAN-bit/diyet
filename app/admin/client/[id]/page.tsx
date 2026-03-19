@@ -23,7 +23,7 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
   const [client, setClient] = useState<any>(null);
   const [weightLogs, setWeightLogs] = useState<any[]>([]);
   const [todayWater, setTodayWater] = useState(0);
-  const [dietPlan, setDietPlan] = useState({ breakfast: "", lunch: "", dinner: "", snacks: "" });
+  const [dietPlan, setDietPlan] = useState({ breakfast: "", lunch: "", dinner: "", snacks: "", exercisePlan: "" });
   const [dietPlanId, setDietPlanId] = useState<string | null>(null);
   
   const [activeTab, setActiveTab] = useState("genel-bakis"); // overview, plan, photos, settings
@@ -141,7 +141,8 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
         breakfast: data.breakfast || "",
         lunch: data.lunch || "",
         dinner: data.dinner || "",
-        snacks: data.snacks || ""
+        snacks: data.snacks || "",
+        exercisePlan: dietPlan.exercisePlan || "" 
       });
     } catch (error) {
        console.error(error);
@@ -305,7 +306,7 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
                     if (!tId) return;
                     const t = templates.find(x => x.id === tId);
                     if (t) {
-                      setDietPlan({ breakfast: t.breakfast, lunch: t.lunch, dinner: t.dinner, snacks: t.snacks });
+                      setDietPlan({ breakfast: t.breakfast, lunch: t.lunch, dinner: t.dinner, snacks: t.snacks, exercisePlan: dietPlan.exercisePlan || "" });
                     }
                     e.target.value = "";
                   }}
@@ -336,6 +337,18 @@ export default function ClientDetailPage(props: { params: Promise<{ id: string }
             <div className="space-y-2">
               <Label>Ara Öğünler</Label>
               <Input value={dietPlan.snacks} onChange={(e) => setDietPlan({...dietPlan, snacks: e.target.value})} placeholder="Ör: Kuruyemiş, meyve, süzme yoğurt..." />
+            </div>
+            <div className="space-y-2 mt-4 pt-4 border-t dark:border-slate-800">
+              <Label className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+                <Target className="w-4 h-4" /> Egzersiz Planı & Hedefleri
+              </Label>
+              <textarea
+                value={dietPlan.exercisePlan || ""} 
+                onChange={(e) => setDietPlan({...dietPlan, exercisePlan: e.target.value})} 
+                placeholder="Ör: Günde 30 şınav çek, haftanın 3 günü 45'er dakika tempolu yürü..." 
+                className="w-full h-24 px-3 py-2 text-sm rounded-md border border-slate-200 dark:border-slate-800 bg-blue-50/50 dark:bg-slate-900 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400/40 transition-all"
+              />
+              <p className="text-xs text-slate-500">Danışanınız egzersizini kaydederken bu hedefi doğrudan görecektir.</p>
             </div>
             <div className="pt-4">
               <Button onClick={handleSaveDietPlan} disabled={savingPlan}>
