@@ -112,10 +112,19 @@ export default function ClientDashboardOverview() {
               {weightLogs.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={weightLogs}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                    <XAxis dataKey="date" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                    <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} cursor={{fill: 'transparent'}} />
-                    <Bar dataKey="steps" fill="#f97316" radius={[4, 4, 0, 0]} />
+                    <defs>
+                      <linearGradient id="colorSteps" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#f97316" stopOpacity={0.9}/>
+                        <stop offset="95%" stopColor="#f97316" stopOpacity={0.3}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.15} />
+                    <XAxis dataKey="date" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickMargin={10} />
+                    <Tooltip 
+                      contentStyle={{ borderRadius: '12px', border: '1px solid #f1f5f9', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} 
+                      cursor={{fill: '#f1f5f9', opacity: 0.4}} 
+                    />
+                    <Bar dataKey="steps" fill="url(#colorSteps)" radius={[6, 6, 0, 0]} maxBarSize={48} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
