@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Camera } from "lucide-react";
 import AIMentor from "@/components/shared/AIMentor";
+import WaterTracker from "@/components/shared/WaterTracker";
 
 export default function ClientLogsPage() {
   const { clientProfile, dietPlan, loading } = useClientData();
@@ -70,6 +71,8 @@ export default function ClientLogsPage() {
         <h1 className="text-3xl font-bold tracking-tight">Günlük Bildirim</h1>
         <p className="text-slate-500 mt-1">Gelişimini takip etmemiz için günlük değerlerini gir.</p>
       </div>
+
+      <WaterTracker clientId={clientProfile.id} />
 
       <Card>
         <CardHeader>
