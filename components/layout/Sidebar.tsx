@@ -20,6 +20,7 @@ export function Sidebar({ role }: { role: "dietitian" | "client" | null }) {
     { href: "/admin", label: "Yönetim Paneli", icon: LayoutDashboard },
     { href: "/admin/appointments", label: "Randevular", icon: User },
     { href: "/admin/templates", label: "Diyet Şablonları", icon: BookTemplate },
+    { href: "/admin/messages", label: "Mesajlar", icon: MessageCircle },
   ];
 
   const clientLinks = [
