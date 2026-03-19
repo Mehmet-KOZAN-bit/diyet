@@ -35,8 +35,12 @@ export default function CaloriesPage() {
   };
 
   const handleAnalyze = async () => {
-    if (mode === "photo" && !imageFile) return;
-    if (mode === "text" && !manualText.trim()) return;
+    if (type === "food") {
+      if (mode === "photo" && !imageFile) return;
+      if (mode === "text" && !manualText.trim()) return;
+    } else if (type === "exercise") {
+      if (!exerciseText.trim()) return;
+    }
     
     setAnalyzing(true);
     setResult(null);
