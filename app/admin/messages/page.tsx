@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { db } from "@/lib/firebase";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { MessageCircle, Search, User } from "lucide-react";
+import { MessageCircle, Search, User, ArrowLeft } from "lucide-react";
 import LiveChat from "@/components/shared/LiveChat";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export interface Client {
@@ -60,7 +61,7 @@ export default function AdminMessagesPage() {
 
       <div className="flex flex-col md:flex-row gap-6 flex-1 overflow-hidden">
         {/* Sidebar / Client List  */}
-        <Card className="md:w-1/3 flex flex-col overflow-hidden border-0 shadow-md">
+        <Card className={`md:w-1/3 flex-col overflow-hidden border-0 shadow-md ${selectedClient ? 'hidden md:flex' : 'flex'}`}>
            <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
              <CardTitle className="text-lg">Danışanlarınız</CardTitle>
              <div className="relative mt-2">
@@ -102,13 +103,23 @@ export default function AdminMessagesPage() {
         </Card>
 
         {/* Chat Area */}
-        <Card className="flex-1 flex flex-col overflow-hidden border-0 shadow-md">
+        <Card className={`flex-1 flex-col overflow-hidden border-0 shadow-md ${!selectedClient ? 'hidden md:flex' : 'flex'}`}>
           {selectedClient ? (
             <>
               <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800 shrink-0 bg-white dark:bg-slate-900">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <User className="w-5 h-5 text-blue-500" /> {selectedClient.name}
-                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="md:hidden -ml-2 shrink-0"
+                    onClick={() => setSelectedClient(null)}
+                  >
+                    <ArrowLeft className="w-5 h-5 text-slate-500" />
+                  </Button>
+                  <CardTitle className="text-lg flex items-center gap-2 m-0">
+                    <User className="w-5 h-5 text-blue-500" /> {selectedClient.name}
+                  </CardTitle>
+                </div>
               </CardHeader>
               <CardContent className="flex-1 p-0 overflow-hidden bg-slate-50 dark:bg-slate-900 border-x border-b border-slate-100 dark:border-slate-800 rounded-b-xl relative">
                 {user?.uid ? (
